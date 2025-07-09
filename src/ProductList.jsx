@@ -6,9 +6,16 @@ import { addItem } from './CartSlice';
 
 function ProductList({ onHomeClick }) {
     const dispatch = useDispatch();
+    const handleAddCart = (plant) => {
+        dispatch(addItem({
+          name:  plant.name,
+          image: plant.image,
+          cost:  plant.cost
+        }));
+      };
+
     const cartItems = useSelector(state => state.cart.items);
     const totalQuantity = cartItems.reduce((sum, it) => sum + it.quantity, 0);
-
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
 
