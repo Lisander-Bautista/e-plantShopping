@@ -1,35 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { removeItem, updateQuantity } from './CartSlice';
 
 export const CartSlice = createSlice({
-    name: 'cart',
-    initialState: {
-        items: [], // Initialize items as an empty array
-    },
-    reducers: {
-        addItem: (state, action) => {
-            const { name, image, cost } = action.payload;
+  name: 'cart',
+  initialState: {
+    items: [],  // Cada ítem: { id, name, image, cost, quantity }
+  },
+  reducers: {
+    addItem: (state, action) => {
+      const { name, image, cost } = action.payload;
 
-            const existingItem = state.items.find(item => item.name === name);
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                state.items.push({ name, image, cost, quantity: 1 });
-            }
-        },
-        removeItem: (state, action) => {
-            state.items = state.items.filter(item => item.name !== action.payload);
-        },
-        updateQuantity: (state, action) => {
-            const { name, quantity } = action.payload;
-            const itemToUpdate = state.items.find(item => item.name === name);
-            if (itemToUpdate) {
-                itemToUpdate.quantity = quantity; // If the item is found, update its quantity to the new value
-            }
-        },
+      // Buscamos por nombre (idealmente usarías un 'id' único)
+      const existing = state.items.find(item => item.name === name);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        state.items.push({ name, image, cost, quantity: 1 });
+      }
     },
+
+    removeItem: (state, action) => {
+      // action.payload debe ser el name (o id) del ítem a eliminar
+      state.items = state.items.filter(item => item.name !== action.payload);
+    },
+
+    updateQuantity: (state, action) => {
+      const { name, quantity } = action.payload;
+      const item = state.items.find(item => item.name === name);
+      if (item) {
+        item.quantity = quantity;
+      }
+    },
+  },
 });
 
+// Exportamos las acciones y el reducer
 export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
-
 export default CartSlice.reducer;
